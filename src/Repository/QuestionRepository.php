@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Question;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -24,14 +25,31 @@ class QuestionRepository extends ServiceEntityRepository
      */
     public function findAllAskedOrderedByNewest()
     {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.askedAt IS NOT NULL')
+        return $this->addIsAskedQueryBuilder()
             ->orderBy('q.askedAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
     }
 
+    /**
+     * @param QueryBuilder $qb
+     * @return QueryBuilder
+     */
+    private function addIsAskedQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    {
+        return $this->getOrCreateQueryBuilder($qb)
+            ->andWhere('q.askedAt IS NOT NULL');
+    }
+
+    /**
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    private function getOrCreateQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    {
+        return $qb ?: $this->createQueryBuilder('q');
+    }
 
     /*
     public function findOneBySomeField($value): ?Question
