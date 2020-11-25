@@ -24,10 +24,22 @@ class QuestionController extends AbstractController
 
     /**
      * @Route("/", name="app_homepage")
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function homepage()
+    public function homepage(EntityManagerInterface $entityManager)
     {
-        return $this->render('question/homepage.html.twig');
+        $repository = $entityManager->getRepository(Question::class);
+
+        $questions = $repository->findAllAskedOrderedByNewest();
+
+        //$questions = $repository->findBy([], ['askedAt' => 'DESC']);
+
+        //dd($questions);
+
+        return $this->render('question/homepage.html.twig', [
+            'questions' => $questions,
+        ]);
     }
 
     /**
