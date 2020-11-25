@@ -33,7 +33,7 @@ class QuestionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param QueryBuilder $qb
+     * @param QueryBuilder|null $qb
      * @return QueryBuilder
      */
     private function addIsAskedQueryBuilder(QueryBuilder $qb = null): QueryBuilder
