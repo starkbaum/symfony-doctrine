@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Repository\QuestionRepository;
 use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -24,12 +25,12 @@ class QuestionController extends AbstractController
 
     /**
      * @Route("/", name="app_homepage")
-     * @param EntityManagerInterface $entityManager
+     * @param QuestionRepository $repository
      * @return Response
      */
-    public function homepage(EntityManagerInterface $entityManager)
+    public function homepage(QuestionRepository $repository)
     {
-        $repository = $entityManager->getRepository(Question::class);
+        //$repository = $entityManager->getRepository(Question::class);
 
         $questions = $repository->findAllAskedOrderedByNewest();
 
