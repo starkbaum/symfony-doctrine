@@ -8,6 +8,7 @@ use App\Service\MarkdownHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -117,5 +118,25 @@ EOF
             'question' => $question,
             'answers' => $answers,
         ]);
+    }
+
+    /**
+     * @Route("/questions/{slug}/vote", name="app_question_vote", methods="POST")
+     * @param Question $question
+     * @param Request $request
+     */
+    public function questionVote(Question $question, Request $request)
+    {
+        //dd($question, $request->request->all());
+
+        $direction = $request->request->get('direction');
+
+        if ($direction === 'up') {
+            $question->setVotes($question->getVotes() + 1);
+        } elseif ($direction === 'down') {
+            $question->setVotes($question->getVotes() - 1);
+        }
+
+        dd($question);
     }
 }
